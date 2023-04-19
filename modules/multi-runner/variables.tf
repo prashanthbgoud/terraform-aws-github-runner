@@ -72,6 +72,8 @@ variable "multi_runner_config" {
       userdata_post_install                   = optional(string, "")
       runner_ec2_tags                         = optional(map(string), {})
       runner_iam_role_managed_policy_arns     = optional(list(string), [])
+      subnet_ids                              = list(string)
+      vpc_id                                  = string
       idle_config = optional(list(object({
         cron      = string
         timeZone  = string
@@ -375,16 +377,6 @@ variable "aws_partition" {
 variable "aws_region" {
   description = "AWS region."
   type        = string
-}
-
-variable "vpc_id" {
-  description = "The VPC for security groups of the action runners."
-  type        = string
-}
-
-variable "subnet_ids" {
-  description = "List of subnets in which the action runners will be launched, the subnets needs to be subnets in the `vpc_id`."
-  type        = list(string)
 }
 
 variable "enable_managed_runner_security_group" {

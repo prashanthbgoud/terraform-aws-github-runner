@@ -3,8 +3,8 @@ module "runners" {
   for_each      = local.runner_config
   aws_region    = var.aws_region
   aws_partition = var.aws_partition
-  vpc_id        = var.vpc_id
-  subnet_ids    = var.subnet_ids
+  vpc_id        = each.value.runner_config.vpc_id
+  subnet_ids    = each.value.runner_config.subnet_ids
   prefix        = "${var.prefix}-${each.key}"
   tags = merge(local.tags, {
     "ghr:environment" = "${var.prefix}-${each.key}"
