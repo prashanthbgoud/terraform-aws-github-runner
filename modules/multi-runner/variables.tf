@@ -72,8 +72,8 @@ variable "multi_runner_config" {
       userdata_post_install                   = optional(string, "")
       runner_ec2_tags                         = optional(map(string), {})
       runner_iam_role_managed_policy_arns     = optional(list(string), [])
-      subnet_ids                              = list(string)
-      vpc_id                                  = string
+      subnet_ids                              = optional(list(string))
+      vpc_id                                  = optional(string)
       idle_config = optional(list(object({
         cron      = string
         timeZone  = string
