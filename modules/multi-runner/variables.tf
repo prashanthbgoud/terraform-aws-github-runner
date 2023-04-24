@@ -379,6 +379,18 @@ variable "aws_region" {
   type        = string
 }
 
+variable "vpc_id" {
+  description = "The VPC for security groups of the action runners."
+  type        = string
+  default     = null
+}
+
+variable "subnet_ids" {
+  description = "List of subnets in which the action runners will be launched, the subnets needs to be subnets in the `vpc_id`."
+  type        = list(string)
+  default     = null
+}
+
 variable "enable_managed_runner_security_group" {
   description = "Enabling the default managed security group creation. Unmanaged security groups can be specified via `runner_additional_security_group_ids`."
   type        = bool
