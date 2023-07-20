@@ -81,14 +81,14 @@ module "multi-runner" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.2 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.2 |
 | <a name="provider_random"></a> [random](#provider\_random) | ~> 3.0 |
 
 ## Modules
@@ -148,7 +148,7 @@ module "multi-runner" {
 | <a name="input_role_path"></a> [role\_path](#input\_role\_path) | The path that will be added to the role; if not set, the environment name will be used. | `string` | `null` | no |
 | <a name="input_role_permissions_boundary"></a> [role\_permissions\_boundary](#input\_role\_permissions\_boundary) | Permissions boundary that will be added to the created role for the lambda. | `string` | `null` | no |
 | <a name="input_runner_additional_security_group_ids"></a> [runner\_additional\_security\_group\_ids](#input\_runner\_additional\_security\_group\_ids) | (optional) List of additional security groups IDs to apply to the runner | `list(string)` | `[]` | no |
-| <a name="input_runner_binaries_s3_sse_configuration"></a> [runner\_binaries\_s3\_sse\_configuration](#input\_runner\_binaries\_s3\_sse\_configuration) | Map containing server-side encryption configuration for runner-binaries S3 bucket. | `any` | `{}` | no |
+| <a name="input_runner_binaries_s3_sse_configuration"></a> [runner\_binaries\_s3\_sse\_configuration](#input\_runner\_binaries\_s3\_sse\_configuration) | Map containing server-side encryption configuration for runner-binaries S3 bucket. | `any` | <pre>{<br>  "rule": {<br>    "apply_server_side_encryption_by_default": {<br>      "sse_algorithm": "AES256"<br>    }<br>  }<br>}</pre> | no |
 | <a name="input_runner_binaries_s3_versioning"></a> [runner\_binaries\_s3\_versioning](#input\_runner\_binaries\_s3\_versioning) | Status of S3 versioning for runner-binaries S3 bucket. Once set to Enabled the change cannot be reverted via Terraform! | `string` | `"Disabled"` | no |
 | <a name="input_runner_binaries_syncer_lambda_timeout"></a> [runner\_binaries\_syncer\_lambda\_timeout](#input\_runner\_binaries\_syncer\_lambda\_timeout) | Time out of the binaries sync lambda in seconds. | `number` | `300` | no |
 | <a name="input_runner_binaries_syncer_lambda_zip"></a> [runner\_binaries\_syncer\_lambda\_zip](#input\_runner\_binaries\_syncer\_lambda\_zip) | File location of the binaries sync lambda zip file. | `string` | `null` | no |
@@ -175,8 +175,11 @@ module "multi-runner" {
 
 | Name | Description |
 |------|-------------|
-| <a name="output_binaries_syncer"></a> [binaries\_syncer](#output\_binaries\_syncer) | n/a |
-| <a name="output_runners"></a> [runners](#output\_runners) | n/a |
+| <a name="output_binaries_syncer"></a> [binaries\_syncer](#output\_binaries\_syncer) | (Deprecated, no longer used), see binaries\_syncer\_map. |
+| <a name="output_binaries_syncer_map"></a> [binaries\_syncer\_map](#output\_binaries\_syncer\_map) | n/a |
+| <a name="output_queues"></a> [queues](#output\_queues) | SQS queues. |
+| <a name="output_runners"></a> [runners](#output\_runners) | (Deprecated, no longer used), see runners\_map. |
+| <a name="output_runners_map"></a> [runners\_map](#output\_runners\_map) | n/a |
 | <a name="output_ssm_parameters"></a> [ssm\_parameters](#output\_ssm\_parameters) | n/a |
 | <a name="output_webhook"></a> [webhook](#output\_webhook) | n/a |
 <!-- END_TF_DOCS -->
