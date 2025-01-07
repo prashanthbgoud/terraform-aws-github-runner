@@ -81,7 +81,7 @@ resource "aws_iam_role" "pool" {
 }
 
 resource "aws_iam_role_policy" "pool" {
-  name = "pool-policy"
+  name = "${var.config.prefix}-pool-policy"
   role = aws_iam_role.pool.name
   policy = templatefile("${path.module}/policies/lambda-pool.json", {
     arn_ssm_parameters_path_config = var.config.arn_ssm_parameters_path_config
@@ -94,7 +94,7 @@ resource "aws_iam_role_policy" "pool" {
 }
 
 resource "aws_iam_role_policy" "pool_logging" {
-  name = "logging-policy"
+  name = "${var.config.prefix}-logging-policy"
   role = aws_iam_role.pool.name
   policy = templatefile("${path.module}/../policies/lambda-cloudwatch.json", {
     log_group_arn = aws_cloudwatch_log_group.pool.arn
@@ -144,7 +144,7 @@ data "aws_iam_policy_document" "lambda_xray" {
 
 resource "aws_iam_role_policy" "pool_xray" {
   count  = var.tracing_config.mode != null ? 1 : 0
-  name   = "xray-policy"
+  name   = "${var.config.prefix}-xray-policy"
   policy = data.aws_iam_policy_document.lambda_xray[0].json
   role   = aws_iam_role.pool.name
 }
