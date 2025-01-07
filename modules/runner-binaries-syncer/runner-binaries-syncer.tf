@@ -103,7 +103,7 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 }
 
 resource "aws_iam_role_policy" "lambda_logging" {
-  name = "logging-policys"
+  name = "${var.prefix}-logging-policys"
   role = aws_iam_role.syncer_lambda.id
 
   policy = templatefile("${path.module}/policies/lambda-cloudwatch.json", {
@@ -112,7 +112,7 @@ resource "aws_iam_role_policy" "lambda_logging" {
 }
 
 resource "aws_iam_role_policy" "syncer" {
-  name = "s3-policy"
+  name = "${var.prefix}-s3-policy"
   role = aws_iam_role.syncer_lambda.id
 
   policy = templatefile("${path.module}/policies/lambda-syncer.json", {

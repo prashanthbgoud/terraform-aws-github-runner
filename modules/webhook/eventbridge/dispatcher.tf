@@ -92,7 +92,7 @@ resource "aws_iam_role" "dispatcher_lambda" {
 }
 
 resource "aws_iam_role_policy" "dispatcher_logging" {
-  name = "logging-policy"
+  name = "${var.config.prefix}-logging-policy"
   role = aws_iam_role.dispatcher_lambda.name
   policy = templatefile("${path.module}/../policies/lambda-cloudwatch.json", {
     log_group_arn = aws_cloudwatch_log_group.dispatcher.arn
@@ -106,7 +106,7 @@ resource "aws_iam_role_policy_attachment" "dispatcher_vpc_execution_role" {
 }
 
 resource "aws_iam_role_policy" "dispatcher_sqs" {
-  name = "publish-sqs-policy"
+  name = "${var.config.prefix}-publish-sqs-policy"
   role = aws_iam_role.dispatcher_lambda.name
 
   policy = templatefile("${path.module}/../policies/lambda-publish-sqs-policy.json", {
@@ -115,7 +115,7 @@ resource "aws_iam_role_policy" "dispatcher_sqs" {
 }
 
 resource "aws_iam_role_policy" "dispatcher_kms" {
-  name = "kms-policy"
+  name = "${var.config.prefix}-kms-policy"
   role = aws_iam_role.webhook_lambda.name
 
   policy = templatefile("${path.module}/../policies/lambda-kms.json", {
@@ -124,7 +124,7 @@ resource "aws_iam_role_policy" "dispatcher_kms" {
 }
 
 resource "aws_iam_role_policy" "dispatcher_ssm" {
-  name = "publish-ssm-policy"
+  name = "${var.config.prefix}-publish-ssm-policy"
   role = aws_iam_role.dispatcher_lambda.name
 
   policy = templatefile("${path.module}/../policies/lambda-ssm.json", {
@@ -134,7 +134,7 @@ resource "aws_iam_role_policy" "dispatcher_ssm" {
 
 resource "aws_iam_role_policy" "dispatcher_xray" {
   count  = var.config.tracing_config.mode != null ? 1 : 0
-  name   = "xray-policy"
+  name   = "${var.config.prefix}-xray-policy"
   policy = data.aws_iam_policy_document.lambda_xray[0].json
   role   = aws_iam_role.dispatcher_lambda.name
 }

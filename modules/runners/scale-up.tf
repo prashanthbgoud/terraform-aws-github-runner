@@ -108,7 +108,7 @@ resource "aws_iam_role" "scale_up" {
 }
 
 resource "aws_iam_role_policy" "scale_up" {
-  name = "scale-up-policy"
+  name = "${var.prefix}-scale-up-policy"
   role = aws_iam_role.scale_up.name
   policy = templatefile("${path.module}/policies/lambda-scale-up.json", {
     arn_runner_instance_role  = aws_iam_role.runner.arn
@@ -122,7 +122,7 @@ resource "aws_iam_role_policy" "scale_up" {
 }
 
 resource "aws_iam_role_policy" "scale_up_logging" {
-  name = "logging-policy"
+  name = "${var.prefix}-logging-policy"
   role = aws_iam_role.scale_up.name
   policy = templatefile("${path.module}/policies/lambda-cloudwatch.json", {
     log_group_arn = aws_cloudwatch_log_group.scale_up.arn
@@ -131,7 +131,7 @@ resource "aws_iam_role_policy" "scale_up_logging" {
 
 resource "aws_iam_role_policy" "service_linked_role" {
   count  = var.create_service_linked_role_spot ? 1 : 0
-  name   = "service_linked_role"
+  name   = "${var.prefix}-service_linked_role"
   role   = aws_iam_role.scale_up.name
   policy = templatefile("${path.module}/policies/service-linked-role-create-policy.json", { aws_partition = var.aws_partition })
 }
@@ -150,14 +150,14 @@ resource "aws_iam_role_policy_attachment" "ami_id_ssm_parameter_read" {
 
 resource "aws_iam_role_policy" "scale_up_xray" {
   count  = var.tracing_config.mode != null ? 1 : 0
-  name   = "xray-policy"
+  name   = "${var.prefix}-xray-policy"
   policy = data.aws_iam_policy_document.lambda_xray[0].json
   role   = aws_iam_role.scale_up.name
 }
 
 resource "aws_iam_role_policy" "job_retry_sqs_publish" {
   count = local.job_retry_enabled ? 1 : 0
-  name  = "publish-retry-check-sqs-policy"
+  name  = "${var.prefix}-publish-retry-check-sqs-policy"
   role  = aws_iam_role.scale_up.name
 
   policy = templatefile("${path.module}/policies/lambda-publish-sqs-policy.json", {

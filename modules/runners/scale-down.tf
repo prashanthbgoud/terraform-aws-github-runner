@@ -92,7 +92,7 @@ resource "aws_iam_role" "scale_down" {
 }
 
 resource "aws_iam_role_policy" "scale_down" {
-  name = "scale-down-policy"
+  name = "${var.prefix}-scale-down-policy"
   role = aws_iam_role.scale_down.name
   policy = templatefile("${path.module}/policies/lambda-scale-down.json", {
     environment               = var.prefix
@@ -103,7 +103,7 @@ resource "aws_iam_role_policy" "scale_down" {
 }
 
 resource "aws_iam_role_policy" "scale_down_logging" {
-  name = "logging-policy"
+  name = "${var.prefix}-logging-policy"
   role = aws_iam_role.scale_down.name
   policy = templatefile("${path.module}/policies/lambda-cloudwatch.json", {
     log_group_arn = aws_cloudwatch_log_group.scale_down.arn
@@ -118,7 +118,7 @@ resource "aws_iam_role_policy_attachment" "scale_down_vpc_execution_role" {
 
 resource "aws_iam_role_policy" "scale_down_xray" {
   count  = var.tracing_config.mode != null ? 1 : 0
-  name   = "xray-policy"
+  name   = "${var.prefix}-xray-policy"
   policy = data.aws_iam_policy_document.lambda_xray[0].json
   role   = aws_iam_role.scale_down.name
 }

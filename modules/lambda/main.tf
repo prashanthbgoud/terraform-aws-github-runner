@@ -89,7 +89,7 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 }
 
 resource "aws_iam_role_policy" "lambda_logging" {
-  name = "logging-policy"
+  name = "${var.lambda.prefix}-logging-policy"
   role = aws_iam_role.main.id
 
   policy = templatefile("${path.module}/policies/lambda-cloudwatch.json", {
@@ -106,7 +106,7 @@ resource "aws_iam_role_policy_attachment" "vpc_execution_role" {
 
 resource "aws_iam_role_policy" "xray" {
   count  = var.lambda.tracing_config.mode != null ? 1 : 0
-  name   = "xray-policy"
+  name   = "${var.lambda.prefix}-xray-policy"
   policy = data.aws_iam_policy_document.lambda_xray[0].json
   role   = aws_iam_role.main.name
 }
